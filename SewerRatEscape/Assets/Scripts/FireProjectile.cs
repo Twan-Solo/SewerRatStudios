@@ -14,6 +14,10 @@ public class FireProjectile : MonoBehaviour
 
     private float lastShotTime;
 
+    [Header("Ammo")]
+    public int maxAmmo = 10;
+    public int currentAmmo = 10;
+
     // Called after instantiation to assign PlayerInput
     public void Init(PlayerInput input)
     {
@@ -32,10 +36,11 @@ public class FireProjectile : MonoBehaviour
     {
         if (fireAction == null) return;
 
-        if (fireAction.triggered && Time.time >= lastShotTime + shootCooldown)
+        if (fireAction.triggered && Time.time >= lastShotTime + shootCooldown && currentAmmo > 0)
         {
             Shoot();
             lastShotTime = Time.time;
+            currentAmmo--;
         }
     }
 
@@ -55,5 +60,11 @@ public class FireProjectile : MonoBehaviour
         }
 
         Debug.Log("Projectile fired!");
+    }
+
+    public void AddAmmo(int amount)
+    {
+        currentAmmo = Mathf.Min(currentAmmo + amount, maxAmmo);
+        Debug.Log("Ammo added. Current ammo: " + currentAmmo);
     }
 }

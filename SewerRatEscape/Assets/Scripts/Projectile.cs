@@ -28,6 +28,17 @@ public class Projectile : MonoBehaviour
     {
         if (other.CompareTag("Player")) return;
 
+        Debug.Log("Projectile hit: " + other.gameObject.name);
+
+        // Stun enemy AI if it has one
+        EnemyAI enemy = other.GetComponentInParent<EnemyAI>();
+        if (enemy != null)
+        {
+            enemy.Stun();
+            Destroy(gameObject);
+            return;
+        }
+
         // Assign the attack tag so ModularDamageDealer detects it
         gameObject.tag = attackTag;
 
