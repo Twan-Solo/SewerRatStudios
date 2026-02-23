@@ -1,0 +1,59 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class FireProjectile : MonoBehaviour
+{
+    [Header("Projectile Settings")]
+    public GameObject projectilePrefab;
+    public Transform firePoint;
+    public float shootCooldown = 0.5f;
+
+    [Header("Player Input")]
+    private PlayerInput playerInput; // assigned via Init()
+    private InputAction fireAction;
+
+    private float lastShotTime;
+
+    // Called after instantiation to assign PlayerInput
+    public void Init(PlayerInput input)
+    {
+        playerInput = input;
+        if (playerInput != null)
+        {
+            fireAction = playerInput.actions["Fire"];
+        }
+        else
+        {
+            Debug.LogError("FireProjectile: PlayerInput is null!");
+        }
+    }
+
+    private void Update()
+    {
+        if (fireAction == null) return;
+
+        if (fireAction.triggered && Time.time >= lastShotTime + shootCooldown)
+        {
+            Shoot();
+            lastShotTime = Time.time;
+        }
+    }
+
+    private void Shoot()
+    {
+        if (projectilePrefab == null || firePoint == null)
+        {
+            Debug.LogError("Projectile Prefab or FirePoint missing!");
+            return;
+        }
+
+        GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+
+        if (projectile.TryGetComponent<Projectile>(out Projectile proj))
+        {
+            proj.SetDirection(firePoint.forward);
+        }
+
+        Debug.Log("Projectile fired!");
+    }
+}
