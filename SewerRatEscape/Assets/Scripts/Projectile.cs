@@ -4,9 +4,11 @@ public class Projectile : MonoBehaviour
 {
     public float speed = 12f;
     public float lifetime = 5f;
-    public string attackTag = "PlayerAttack"; // must match ModularDamageDealer.vulnerableToTag
+    public float stickDuration = 3f;
+    public string attackTag = "PlayerAttack";
 
     private Vector3 moveDirection;
+    private bool hasHit;
 
     public void SetDirection(Vector3 direction)
     {
@@ -21,14 +23,18 @@ public class Projectile : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
+        if (!hasHit)
+        {
+            transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) return;
+        if (other.GetComponentInParent<PlayerData>() != null) return; 
+        if (hasHit) return;
 
-        Debug.Log("Projectile hit: " + other.gameObject.name);
+        Debug.Log("projectile hit: " + other.gameObject.name);
 
         // Stun enemy AI if it has one
         EnemyAI enemy = other.GetComponentInParent<EnemyAI>();
@@ -47,6 +53,8 @@ public class Projectile : MonoBehaviour
         if (dealer != null)
             dealer.SendMessage("HandleInteraction", gameObject, SendMessageOptions.DontRequireReceiver);
 
-        Destroy(gameObject);
+        // Stick to surface then despawn
+        hasHit = true;
+        Destroy(gameObject, stickDuration);
     }
 }

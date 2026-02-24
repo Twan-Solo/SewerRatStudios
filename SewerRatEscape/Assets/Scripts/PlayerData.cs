@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem; // Required for new Input System
+using UnityEngine.InputSystem;
 
 public class PlayerData : MonoBehaviour
 {
@@ -13,9 +13,13 @@ public class PlayerData : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
 
+    [Header("Damage")]
+    public float damageCooldown = 1.5f;
+    private float lastDamageTime;
+
     [Header("Death Settings")]
-    public string mainMenuSceneName = "MainMenu"; // scene to return to on death
-    public bool destroyPlayerOnDeath = true;      // remove PlayerData on death
+    public string mainMenuSceneName = "MainMenu";
+    public bool destroyPlayerOnDeath = true;
 
     private void Awake()
     {
@@ -33,7 +37,6 @@ public class PlayerData : MonoBehaviour
 
     private void Update()
     {
-        // Escape key handling for new Input System
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             string menuScene = "MainMenu";
@@ -57,6 +60,10 @@ public class PlayerData : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
+        // Invincibility frames after getting hit
+        if (Time.time < lastDamageTime + damageCooldown) return;
+        lastDamageTime = Time.time;
+
         currentHealth -= damageAmount;
         if (currentHealth < 0) currentHealth = 0;
 
@@ -64,9 +71,17 @@ public class PlayerData : MonoBehaviour
         if (HealthCounter.Instance != null)
             HealthCounter.Instance.UpdateHealthDisplay();
 
+        // Shake camera on damage
+        if (CameraShake.Instance != null)
+        {
+            CameraShake.Instance.Shake(4f);
+        }
+
         // Check death
         if (currentHealth <= 0)
             HandleDeath();
+            
+            Debug.Log("shake instance: " + (CameraShake.Instance != null));
     }
 
     public void Heal(int healAmount)
@@ -102,7 +117,6 @@ public class PlayerData : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Destroy PlayerData if we return to Main Menu to reset
         if (scene.name == "MainMenu" && destroyPlayerOnDeath)
         {
             Destroy(gameObject);

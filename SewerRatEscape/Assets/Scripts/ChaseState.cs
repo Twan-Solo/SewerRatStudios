@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// Pursues the player until they escape or get caught.
-/// <summary>
+/// </summary>
 public class ChaseState : EnemyState
 {
     private const float CATCH_DISTANCE = 1.5f;
@@ -38,10 +38,11 @@ public class ChaseState : EnemyState
         if (distance <= CATCH_DISTANCE)
         {
             enemy.CatchPlayer();
-            enemy.ChangeState(new PatrolState(enemy));
+            // Short pause after catching so it doesn't instantly chase again
+            enemy.ChangeState(new StunnedState(enemy, 1f));
             return;
-    }
-    
+        }
+
         enemy.agent.SetDestination(enemy.player.position);
     }
 

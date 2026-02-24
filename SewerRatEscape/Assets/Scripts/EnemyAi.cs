@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour
     [Header("Combat")]
     public int lifeDamage = 1;
     public float stunDuration = 3f;
+    public float catchCooldown = 2f;
     
     [Header("Movement")]
     public float patrolSpeed = 2f;
@@ -25,6 +26,7 @@ public class EnemyAI : MonoBehaviour
     [HideInInspector] public Transform player;
     
     private EnemyState currentState;
+    private float lastCatchTime;
     
     public string CurrentStateName { get; private set; }
     
@@ -94,6 +96,9 @@ public class EnemyAI : MonoBehaviour
 
     public void CatchPlayer()
     {
+        if (Time.time < lastCatchTime + catchCooldown) return;
+        lastCatchTime = Time.time;
+
         if (PlayerData.Instance != null)
         {
             PlayerData.Instance.TakeDamage(lifeDamage);

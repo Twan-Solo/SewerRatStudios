@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 /// <summary>
@@ -7,14 +6,23 @@ using UnityEngine;
 public class StunnedState : EnemyState
 {
     private float stunTimer;
+    private float duration;
 
-    public StunnedState(EnemyAI enemy) : base(enemy) { }
+    public StunnedState(EnemyAI enemy) : base(enemy)
+    {
+        duration = enemy.stunDuration;
+    }
+
+    public StunnedState(EnemyAI enemy, float customDuration) : base(enemy)
+    {
+        duration = customDuration;
+    }
 
     public override void Enter()
     {
         enemy.agent.isStopped = true;
         enemy.agent.velocity = Vector3.zero;
-        stunTimer = enemy.stunDuration;
+        stunTimer = duration;
 
         Debug.Log(enemy.gameObject.name + " is stunned!" + stunTimer + "s");
     }

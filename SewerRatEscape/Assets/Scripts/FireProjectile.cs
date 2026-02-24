@@ -54,6 +54,14 @@ public class FireProjectile : MonoBehaviour
 
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
 
+        // Ignore all player colliders so the pellet doesn't stick to the player
+        Collider pelletCol = projectile.GetComponent<Collider>();
+        Collider[] playerCols = GetComponentsInParent<Collider>(true);
+        for (int i = 0; i < playerCols.Length; i++)
+        {
+            Physics.IgnoreCollision(pelletCol, playerCols[i]);
+        }
+
         if (projectile.TryGetComponent<Projectile>(out Projectile proj))
         {
             proj.SetDirection(firePoint.forward);
