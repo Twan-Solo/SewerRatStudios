@@ -35,7 +35,7 @@ public class PlayerSpawner : MonoBehaviour
         if (controller != null)
         {
             // Find Cinemachine Camera (CM3 uses CinemachineCamera)
-            CinemachineCamera vcam = FindObjectOfType<CinemachineCamera>();
+            CinemachineCamera vcam = FindFirstObjectByType<CinemachineCamera>();
 
             if (vcam != null)
             {
