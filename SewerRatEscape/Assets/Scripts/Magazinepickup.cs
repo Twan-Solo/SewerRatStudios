@@ -7,6 +7,9 @@ public class Magazinepickup : MonoBehaviour
 {
     public int ammoAmount = 5;
 
+    [Header("Audio")]
+    public AudioClip pickupSound;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -16,6 +19,11 @@ public class Magazinepickup : MonoBehaviour
             if (gun != null)
             {
                 gun.AddAmmo(ammoAmount);
+            }
+
+            if (pickupSound != null && AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySFX(pickupSound);
             }
 
             Destroy(gameObject);

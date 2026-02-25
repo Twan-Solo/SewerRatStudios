@@ -9,7 +9,7 @@ public class FireProjectile : MonoBehaviour
     public float shootCooldown = 0.5f;
 
     [Header("Player Input")]
-    private PlayerInput playerInput; // assigned via Init()
+    private PlayerInput playerInput;
     private InputAction fireAction;
 
     private float lastShotTime;
@@ -18,7 +18,9 @@ public class FireProjectile : MonoBehaviour
     public int maxAmmo = 10;
     public int currentAmmo = 10;
 
-    // Called after instantiation to assign PlayerInput
+    [Header("Audio")]
+    public AudioClip shootSound;
+
     public void Init(PlayerInput input)
     {
         playerInput = input;
@@ -54,7 +56,6 @@ public class FireProjectile : MonoBehaviour
 
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
 
-        // Ignore all player colliders so the pellet doesn't stick to the player
         Collider pelletCol = projectile.GetComponent<Collider>();
         Collider[] playerCols = GetComponentsInParent<Collider>(true);
         for (int i = 0; i < playerCols.Length; i++)
@@ -67,7 +68,10 @@ public class FireProjectile : MonoBehaviour
             proj.SetDirection(firePoint.forward);
         }
 
-        Debug.Log("Projectile fired!");
+        if (shootSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(shootSound);
+        }
     }
 
     public void AddAmmo(int amount)

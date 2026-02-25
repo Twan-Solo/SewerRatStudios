@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 /// <summary>
-/// State machine driven enemy AI. NavMeshAgent handles movement
+/// State machine driven enemy AI. NavMeshAgent handles movement.
 /// Configure speed, damage, and stun values per enemy type in the Inspector.
 /// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
@@ -21,6 +21,10 @@ public class EnemyAI : MonoBehaviour
     public float chaseSpeed = 4f;
     public float wanderRadius = 15f;
     public float wanderPause = 2f;
+
+    [Header("Audio")]
+    public AudioClip attackSound;
+    public AudioSource scurrySource;
     
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Transform player;
@@ -43,7 +47,6 @@ public class EnemyAI : MonoBehaviour
     
     private void Update()
     {
-        // Player gets spawned at runtime, so grab the reference if it's missing
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -57,11 +60,22 @@ public class EnemyAI : MonoBehaviour
         {
             currentState.Execute();
         }
+
+        // Scurry audio matches movement
+        if (scurrySource != null)
+        {
+            bool moving = agent.velocity.sqrMagnitude > 0.1f;
+            if (moving && !scurrySource.isPlaying)
+            {
+                scurrySource.Play();
+            }
+            else if (!moving && scurrySource.isPlaying)
+            {
+                scurrySource.Stop();
+            }
+        }
     }
 
-    /// <summary>
-    /// All state transistions go through this method
-    /// </summary>
     public void ChangeState(EnemyState newState)
     {
         if (currentState != null)
@@ -86,9 +100,6 @@ public class EnemyAI : MonoBehaviour
         return Vector3.Distance(transform.position, player.position);
     }
 
-    /// <summary>
-    /// Called by the pellet gun on hit. Forces stunned state no matter what.
-    /// </summary>
     public void Stun()
     {
         ChangeState(new StunnedState(this));
@@ -102,6 +113,11 @@ public class EnemyAI : MonoBehaviour
         if (PlayerData.Instance != null)
         {
             PlayerData.Instance.TakeDamage(lifeDamage);
+        }
+
+        if (attackSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(attackSound);
         }
 
         Debug.Log(gameObject.name + " caught the player, dmg: " + lifeDamage);

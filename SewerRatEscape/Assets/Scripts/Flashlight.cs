@@ -16,11 +16,13 @@ public class Flashlight : MonoBehaviour
     public float drainRate = 10f;
     public float rechargeRate = 5f;
 
+    [Header("Audio")]
+    public AudioClip toggleSound;
+
     private bool isOn;
 
     private void Start()
     {
-        // Start with the flashlight off
         spotLight.enabled = false;
         isOn = false;
     }
@@ -36,7 +38,6 @@ public class Flashlight : MonoBehaviour
         {
             currentBattery -= drainRate * Time.deltaTime;
 
-            // Ran out, force it off
             if (currentBattery <= 0f)
             {
                 currentBattery = 0f;
@@ -51,7 +52,6 @@ public class Flashlight : MonoBehaviour
 
     private void Toggle()
     {
-        // Don't let them turn it on with a dead battery
         if (!isOn && currentBattery <= 0f)
         {
             return;
@@ -59,11 +59,13 @@ public class Flashlight : MonoBehaviour
 
         isOn = !isOn;
         spotLight.enabled = isOn;
+
+        if (toggleSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(toggleSound);
+        }
     }
 
-    /// <summary>
-    /// Returns battery as a 0 to 1 value for UI display.
-    /// </summary>
     public float GetBatteryNormalized()
     {
         return currentBattery / maxBattery;
