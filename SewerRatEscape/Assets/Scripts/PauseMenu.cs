@@ -10,6 +10,9 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     public string mainMenuScene = "MainMenu";
 
+    [Header("Audio")]
+    public AudioClip buttonClickSound;
+
     private bool isPaused;
 
     private void Start()
@@ -34,6 +37,11 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        if (buttonClickSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(buttonClickSound);
+        }
+
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
@@ -51,6 +59,11 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
+        if (buttonClickSound != null && AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySFX(buttonClickSound);
+        }
+
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
