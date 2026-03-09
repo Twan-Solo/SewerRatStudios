@@ -11,6 +11,8 @@ namespace StarterAssets
 #endif
     public class FirstPersonController : MonoBehaviour
     {
+    
+
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 4.0f;
@@ -185,6 +187,7 @@ namespace StarterAssets
             }
 
             _controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+        
         }
 
         private void JumpAndGravity()
