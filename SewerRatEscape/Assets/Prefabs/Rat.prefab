@@ -160,7 +160,7 @@ MonoBehaviour:
   chaseSpeed: 4
   wanderRadius: 15
   wanderPause: 2
-  attackSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 33b9ed4b5e529cc4983f5f249a116631, type: 3}
   scurrySource: {fileID: 0}
   agent: {fileID: 0}
   player: {fileID: 0}

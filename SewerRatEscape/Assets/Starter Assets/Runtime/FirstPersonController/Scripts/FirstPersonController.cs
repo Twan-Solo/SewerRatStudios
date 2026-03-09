@@ -11,7 +11,15 @@ namespace StarterAssets
 #endif
     public class FirstPersonController : MonoBehaviour
     {
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     
+=======
+   
+>>>>>>> Stashed changes
+=======
+   
+>>>>>>> Stashed changes
 
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
