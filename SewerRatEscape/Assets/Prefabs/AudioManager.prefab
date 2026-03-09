@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6024258428200853945}
   - component: {fileID: 39843892315253129}
-  - component: {fileID: 1917687414359824311}
+  - component: {fileID: 1678091020651307229}
   - component: {fileID: 2179382341432327646}
   m_Layer: 0
   m_Name: AudioManager
@@ -45,7 +45,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: ed8fba6ddb6aaf84c998787fff35091a, type: 3}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -131,7 +131,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!82 &1917687414359824311
+--- !u!82 &1678091020651307229
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,8 +142,8 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 1dd868b73b9080b4daf1d678357608bb, type: 3}
-  m_PlayOnAwake: 1
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -241,4 +241,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   musicSource: {fileID: 39843892315253129}
-  sfxSource: {fileID: 39843892315253129}
+  sfxSource: {fileID: 1678091020651307229}

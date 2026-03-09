@@ -2,32 +2,29 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [Header("Health Settings")]
-    public int healthValue = 1;   // Amount of health to give the player
+    //public float lifetime = 5f;  // Health destroys itself after 5 seconds
+    public int healthValue = 1;   // Score added when player collects
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Destroy(gameObject, lifetime);
+    }
 
-    [Header("Audio")]
-    public AudioClip pickupSound;  // Sound to play when picked up
+    // Update is called once per frame
+    void Update()
+    {
 
-    // Called when something enters the trigger
-    private void OnTriggerEnter(Collider other)
+    }
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // Add health to player
             if (HealthCounter.Instance != null)
                 HealthCounter.Instance.AddHealth(healthValue);
 
-            // Play pickup sound via AudioManager
-            if (AudioManager.Instance != null && pickupSound != null)
-            {
-                AudioManager.Instance.PlaySFX(pickupSound);
-            }
-
-            // Destroy the health pickup
             Destroy(gameObject);
         }
 
-        // Destroy the pickup if an enemy touches it
         if (other.CompareTag("Enemy"))
         {
             Destroy(gameObject);

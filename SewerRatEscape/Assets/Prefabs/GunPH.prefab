@@ -132,7 +132,7 @@ MonoBehaviour:
   shootCooldown: 0.5
   maxAmmo: 10
   currentAmmo: 10
-  shootSound: {fileID: 8300000, guid: 05aaf2ea67ccb54429963b0757d7e6e7, type: 3}
+  shootSound: {fileID: 0}
 --- !u!1 &6358968468731657876
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,7 +158,7 @@ Transform:
   m_GameObject: {fileID: 6358968468731657876}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.51, y: 0.67, z: 1.16}
+  m_LocalPosition: {x: 0.38723272, y: 0.50000495, z: 0.564}
   m_LocalScale: {x: 5.5200377, y: 5.5200377, z: 5.5200377}
   m_ConstrainProportionsScale: 0
   m_Children: []
