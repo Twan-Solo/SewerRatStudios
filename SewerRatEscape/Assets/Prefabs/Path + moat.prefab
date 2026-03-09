@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 691673697128310165}
   - component: {fileID: 2877987661822454622}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: Right floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -706,7 +706,7 @@ GameObject:
   - component: {fileID: 6764658181781716466}
   - component: {fileID: 3186412246745048124}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Left floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
