@@ -124,7 +124,7 @@ Transform:
   m_GameObject: {fileID: 5393215578589016642}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: -0.353, y: 1.063, z: 0.232}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -417,17 +417,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 4
+  MoveSpeed: 6
   SprintSpeed: 6
   RotationSpeed: 1
   SpeedChangeRate: 10
-  JumpHeight: 1.2
+  JumpHeight: 1.5
   Gravity: -15
   JumpTimeout: 0.1
   FallTimeout: 0.15
   Grounded: 1
-  GroundedOffset: -0.14
-  GroundedRadius: 0.5
+  GroundedOffset: -0.05
+  GroundedRadius: 0.25
   GroundLayers:
     serializedVersion: 2
     m_Bits: 1
@@ -650,6 +650,6 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2.5257854
+  m_Height: 2.0576267
   m_Direction: 1
-  m_Center: {x: 0, y: 0.7628927, z: 0}
+  m_Center: {x: 0, y: 0.9969721, z: 0}

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4204852157557393065}
   - component: {fileID: 993888481416141402}
   - component: {fileID: 3930163698464963705}
-  - component: {fileID: 4701502665813093940}
   m_Layer: 0
   m_Name: Small jump
   m_TagString: Untagged
@@ -333,26 +332,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6300766485604888131}
-  m_Mesh: {fileID: 0}
---- !u!64 &4701502665813093940
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6300766485604888131}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}

@@ -8,6 +8,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyAI : MonoBehaviour
 {
+    private Animator animator;
     [Header("Detection")]
     public float detectionRange = 10f;
     
@@ -36,6 +37,7 @@ public class EnemyAI : MonoBehaviour
     
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
     }
@@ -47,6 +49,11 @@ public class EnemyAI : MonoBehaviour
     
     private void Update()
     {
+        if (animator != null)
+        {
+            bool isMoving = agent.velocity.sqrMagnitude > 0.1f;
+            animator.SetBool("IsRunning", isMoving);
+        }
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
