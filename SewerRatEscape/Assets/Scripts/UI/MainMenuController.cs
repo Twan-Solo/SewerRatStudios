@@ -1,22 +1,43 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
-
 {
-    public FadeTransition fadeTransition;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    // Loads the first level (by build index)
-    public void StartGame()
+    [Header("UI Buttons")]
+    public Button playButton;
+    public Button quitButton;
+
+    [Header("Fade Transition")]
+    public FadeTransition fadeTransition; // assign in inspector
+
+    [Header("Scenes")]
+    public string levelToLoad = "Level1"; // scene name as string
+
+    private void Awake()
     {
-        fadeTransition.FadeToScene(1);
+        if (playButton != null)
+            playButton.onClick.AddListener(OnPlayClicked);
+
+        if (quitButton != null)
+            quitButton.onClick.AddListener(OnQuitClicked);
     }
 
-    // Update is called once per frame
-    public void ExitGame()
+    private void OnPlayClicked()
     {
-        Debug.Log("Exit Game pressed");
+        if (fadeTransition != null)
+        {
+            // Use string version of FadeToScene
+            fadeTransition.FadeToScene(levelToLoad);
+        }
+        else
+        {
+            // fallback if no fade assigned
+            UnityEngine.SceneManagement.SceneManager.LoadScene(levelToLoad);
+        }
+    }
+
+    private void OnQuitClicked()
+    {
         Application.Quit();
     }
 }
