@@ -67,8 +67,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a63e12f0ce4c64694f691872bf579d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  lifetime: 5
   healthValue: 1
+  collectSound: {fileID: 8300000, guid: 7f85e5662e26eaa408cdc8067d643a81, type: 3}
 --- !u!1001 &5703444839580622074
 PrefabInstance:
   m_ObjectHideFlags: 0

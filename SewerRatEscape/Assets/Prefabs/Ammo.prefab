@@ -126,8 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea2d3af1e5c1a0648847b5fb4f9c0546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Magazinepickup
-  ammoAmount: 5
-  pickupSound: {fileID: 0}
+  ammoAmount: 10
+  pickupSound: {fileID: 8300000, guid: 7f85e5662e26eaa408cdc8067d643a81, type: 3}
 --- !u!1001 &4104507609922555167
 PrefabInstance:
   m_ObjectHideFlags: 0

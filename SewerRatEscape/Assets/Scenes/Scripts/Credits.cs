@@ -18,10 +18,14 @@ public class Credits : MonoBehaviour
     [SerializeField] private float startY = -600f;
     [SerializeField] private float endY = 600f;
 
-    [Header("Bounce Animator")]
+    [Header("Bounce Animator (optional)")]
     [SerializeField] private Animator bounceAnimator;
     [SerializeField] private GameObject bounceObject;
     [SerializeField] private string bounceTriggerName = "PlayBounce";
+
+    [Header("Bounce Sound")]
+    [SerializeField] private AudioClip bounceSound;      // assign in inspector
+    [SerializeField] private AudioSource audioSource;    // assign in inspector
 
     [Header("Timing")]
     [SerializeField] private float timeAfterBounce = 3f;
@@ -46,7 +50,6 @@ public class Credits : MonoBehaviour
         if (!scrollingFinished)
             ScrollCredits();
 
-        // Optional skip (works with old or new Input System)
 #if ENABLE_INPUT_SYSTEM
         if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
         {
@@ -81,10 +84,15 @@ public class Credits : MonoBehaviour
         if (bounceObject != null)
             bounceObject.SetActive(true);
 
-        // Start the bounce animation
+        // Play bounce animation (optional)
         if (bounceAnimator != null)
             bounceAnimator.SetTrigger(bounceTriggerName);
 
+        // --- Play bounce sound immediately when credits finish ---
+        if (audioSource != null && bounceSound != null)
+            audioSource.PlayOneShot(bounceSound);
+
+        // Start timer to go to main menu
         StartCoroutine(GoToMenuAfterDelay());
     }
 

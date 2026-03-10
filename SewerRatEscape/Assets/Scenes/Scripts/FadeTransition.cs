@@ -7,11 +7,12 @@ public class FadeTransition : MonoBehaviour
 {
     public Image fadeImage;
     public float fadeDuration = 1f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         StartCoroutine(FadeIn());
     }
+
     public void FadeToScene(int sceneIndex)
     {
         StartCoroutine(FadeOut(sceneIndex));
@@ -23,7 +24,8 @@ public class FadeTransition : MonoBehaviour
         while (timer < fadeDuration)
         {
             timer += Time.deltaTime;
-            fadeImage.color = new Color(0, 0, 0, 1 - (timer / fadeDuration));
+            // Keep RGB white so the sprite shows, only alpha changes
+            fadeImage.color = new Color(1, 1, 1, 1 - (timer / fadeDuration));
             yield return null;
         }
     }
@@ -34,16 +36,11 @@ public class FadeTransition : MonoBehaviour
         while (timer < fadeDuration)
         {
             timer += Time.deltaTime;
-            fadeImage.color = new Color(0, 0, 0, timer / fadeDuration);
+            // Keep RGB white so the sprite shows, only alpha changes
+            fadeImage.color = new Color(1, 1, 1, timer / fadeDuration);
             yield return null;
         }
 
         SceneManager.LoadScene(sceneIndex);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
