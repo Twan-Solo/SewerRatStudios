@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class FireProjectile : MonoBehaviour
 {
@@ -21,9 +22,12 @@ public class FireProjectile : MonoBehaviour
     [Header("Audio")]
     public AudioClip shootSound;
 
+    private TextMeshProUGUI ammoText;
+
     public void Init(PlayerInput input)
     {
         playerInput = input;
+
         if (playerInput != null)
         {
             fireAction = playerInput.actions["Fire"];
@@ -32,6 +36,23 @@ public class FireProjectile : MonoBehaviour
         {
             Debug.LogError("FireProjectile: PlayerInput is null!");
         }
+    }
+
+    void Start()
+    {
+        // Find ammo UI automatically
+        GameObject ammoObj = GameObject.Find("AmmoText");
+
+        if (ammoObj != null)
+        {
+            ammoText = ammoObj.GetComponent<TextMeshProUGUI>();
+        }
+        else
+        {
+            Debug.LogWarning("AmmoText UI not found in scene!");
+        }
+
+        UpdateAmmoUI();
     }
 
     private void Update()
@@ -43,6 +64,8 @@ public class FireProjectile : MonoBehaviour
             Shoot();
             lastShotTime = Time.time;
             currentAmmo--;
+
+            UpdateAmmoUI();
         }
     }
 
@@ -58,6 +81,7 @@ public class FireProjectile : MonoBehaviour
 
         Collider pelletCol = projectile.GetComponent<Collider>();
         Collider[] playerCols = GetComponentsInParent<Collider>(true);
+
         for (int i = 0; i < playerCols.Length; i++)
         {
             Physics.IgnoreCollision(pelletCol, playerCols[i]);
@@ -77,6 +101,17 @@ public class FireProjectile : MonoBehaviour
     public void AddAmmo(int amount)
     {
         currentAmmo = Mathf.Min(currentAmmo + amount, maxAmmo);
+
+        UpdateAmmoUI();
+
         Debug.Log("Ammo added. Current ammo: " + currentAmmo);
+    }
+
+    void UpdateAmmoUI()
+    {
+        if (ammoText != null)
+        {
+            ammoText.text = currentAmmo + " / " + maxAmmo;
+        }
     }
 }

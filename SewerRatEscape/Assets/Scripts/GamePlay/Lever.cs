@@ -1,36 +1,58 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 /// <summary>
 /// A lever the player can pull once. Fires a UnityEvent so you can
-/// hook up whatever it triggers in the Inspector
-/// /// </summary>
+/// hook up whatever it triggers in the Inspector. Optionally destroys
+/// assigned GameObjects when pulled.
+/// </summary>
 public class Lever : MonoBehaviour, IInteractable
 {
-    public UnityEvent onPull;
+    [Header("Lever Settings")]
+    public UnityEvent onPull;                // Actions triggered when lever is pulled
     public string promptText = "Pull Lever";
+    public bool destroyAfterPull = false;    // Destroy lever itself after pulling
+
+    [Header("Optional Objects to Destroy")]
+    public List<GameObject> objectsToDestroy; // Assign any GameObjects to destroy
 
     private bool hasBeenPulled;
 
+    /// <summary>
+    /// Called by the player to interact with this lever
+    /// </summary>
     public void Interact()
     {
-        if (hasBeenPulled)
-        {
-            return;
-        }
+        if (hasBeenPulled) return;
 
         hasBeenPulled = true;
+
+        // Fire all assigned actions in the UnityEvent
         onPull.Invoke();
 
-        Debug.Log(gameObject.name + " pulled ");
-    }
-    public string GetPromptText()
-    {
-        if (hasBeenPulled)
+        // Destroy any assigned objects
+        if (objectsToDestroy != null)
         {
-            return "";
+            foreach (GameObject obj in objectsToDestroy)
+            {
+                if (obj != null)
+                    Destroy(obj);
+            }
         }
 
-        return promptText;
+        Debug.Log(gameObject.name + " pulled");
+
+        // Optional: destroy the lever itself
+        if (destroyAfterPull)
+            Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Returns the prompt text for UI
+    /// </summary>
+    public string GetPromptText()
+    {
+        return hasBeenPulled ? "" : promptText;
     }
 }
