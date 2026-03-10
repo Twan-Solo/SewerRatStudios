@@ -6,38 +6,31 @@ using StarterAssets;
 public class FootstepAudio : MonoBehaviour
 {
     public AudioClip footstepSound;
-    public float stepInterval = 0.5f;
 
     private CharacterController controller;
     private StarterAssetsInputs input;
     private AudioSource audioSource;
-
-    private float stepTimer;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
         input = GetComponent<StarterAssetsInputs>();
         audioSource = GetComponent<AudioSource>();
+        audioSource.clip = footstepSound;
+        audioSource.loop = true;
     }
 
     void Update()
     {
-        bool isMoving = input.move != Vector2.zero;
+        bool isMoving = input.move != Vector2.zero && controller.isGrounded;
 
-        if (controller.isGrounded && isMoving)
+        if (isMoving && !audioSource.isPlaying)
         {
-            stepTimer -= Time.deltaTime;
-
-            if (stepTimer <= 0f)
-            {
-                audioSource.PlayOneShot(footstepSound);
-                stepTimer = stepInterval;
-            }
+            audioSource.Play();
         }
-        else
+        else if (!isMoving && audioSource.isPlaying)
         {
-            stepTimer = 0f;
+            audioSource.Stop();
         }
     }
 }

@@ -54,6 +54,7 @@ public class Ladder : MonoBehaviour, IInteractable
         if (fpsController != null)
         {
             fpsController.Gravity = savedGravity;
+            fpsController.ResetVerticalVelocity();
         }
 
         playerController = null;

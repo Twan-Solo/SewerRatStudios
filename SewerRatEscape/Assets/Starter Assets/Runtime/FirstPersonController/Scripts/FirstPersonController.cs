@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -121,7 +121,7 @@ namespace StarterAssets
             GroundedCheck();
             Move();
         }
-
+        
         private void LateUpdate()
         {
             CameraRotation();
@@ -214,6 +214,11 @@ namespace StarterAssets
 
             if (_verticalVelocity < _terminalVelocity)
                 _verticalVelocity += Gravity * Time.deltaTime;
+        }
+
+        public void ResetVerticalVelocity()
+        {
+            _verticalVelocity = 0f;
         }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
