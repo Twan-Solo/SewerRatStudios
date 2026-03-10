@@ -21,9 +21,8 @@ public class PlayerData : MonoBehaviour
     public string mainMenuSceneName = "MainMenu";
     public bool destroyPlayerOnDeath = true;
 
-    [Header("Fade on Death")]
-    public FadeTransition fadeTransition; // Assign your FadeTransition in inspector
-    public AudioClip deathMusic;          // Optional music/sound to play on death
+    [Header("Death Screen")]
+    public AudioClip deathMusic;   // Optional
 
     private void Awake()
     {
@@ -44,23 +43,9 @@ public class PlayerData : MonoBehaviour
         // Escape key returns to Main Menu
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            if (fadeTransition != null)
-            {
-                if (deathMusic != null)
-                    fadeTransition.fadeSound = deathMusic;
-
-                fadeTransition.FadeToScene(mainMenuSceneName);
-                if (destroyPlayerOnDeath)
-                    Destroy(gameObject, fadeTransition.fadeDuration + 0.1f);
-            }
-            else
-            {
-                if (destroyPlayerOnDeath)
-                    Destroy(gameObject);
-
-                if (!string.IsNullOrEmpty(mainMenuSceneName))
-                    SceneManager.LoadScene(mainMenuSceneName);
-            }
+            SceneManager.LoadScene(mainMenuSceneName);
+            if (destroyPlayerOnDeath)
+                Destroy(gameObject, 0.1f);
         }
     }
 
@@ -72,7 +57,6 @@ public class PlayerData : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
-        // Invincibility frames after getting hit
         if (Time.time < lastDamageTime + damageCooldown) return;
         lastDamageTime = Time.time;
 
@@ -83,11 +67,10 @@ public class PlayerData : MonoBehaviour
         if (HealthCounter.Instance != null)
             HealthCounter.Instance.UpdateHealthDisplay();
 
-        // Shake camera on damage
+        // Shake camera
         if (CameraShake.Instance != null)
             CameraShake.Instance.Shake(4f);
 
-        // Check death
         if (currentHealth <= 0)
             HandleDeath();
     }
@@ -109,42 +92,22 @@ public class PlayerData : MonoBehaviour
     {
         Debug.Log("Player has died!");
 
-        if (fadeTransition != null)
+        // Use FindFirstObjectByType to avoid obsolete warning
+        DeathScreen deathScreen = DeathScreen.FindFirstObjectByType<DeathScreen>();
+
+        if (deathScreen != null)
         {
-            // Play optional death music
             if (deathMusic != null)
-                fadeTransition.fadeSound = deathMusic;
+                deathScreen.deathSound = deathMusic;
 
-            // Start fade, then load main menu
-            fadeTransition.FadeToScene(mainMenuSceneName);
-
-            // Destroy player AFTER fade finishes
-            if (destroyPlayerOnDeath)
-                Destroy(gameObject, fadeTransition.fadeDuration + 0.1f);
+            deathScreen.ShowDeathScreen();
         }
         else
         {
-            // No fade assigned, fallback to immediate load
-            if (destroyPlayerOnDeath)
-                Destroy(gameObject);
-
-            if (!string.IsNullOrEmpty(mainMenuSceneName))
-                SceneManager.LoadScene(mainMenuSceneName);
+            // Fallback: no death screen
+            SceneManager.LoadScene(mainMenuSceneName);
         }
-    }
 
-    // ------------------------------
-    // Scene Management
-    // ------------------------------
-
-    private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
-    private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == mainMenuSceneName && destroyPlayerOnDeath)
-        {
-            Destroy(gameObject);
-        }
+        // Do NOT destroy player immediately — let the scene load naturally
     }
 }

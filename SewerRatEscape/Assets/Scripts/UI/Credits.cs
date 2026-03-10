@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
-using TMPro;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -11,6 +9,9 @@ public class Credits : MonoBehaviour
 {
     [Header("Scenes")]
     [SerializeField] private string mainMenuSceneName = "MainMenu";
+
+    [Header("Fade System")]
+    [SerializeField] private FadeTransition fadeTransition;
 
     [Header("Scrolling Credits")]
     [SerializeField] private RectTransform creditsText;
@@ -24,22 +25,23 @@ public class Credits : MonoBehaviour
     [SerializeField] private string bounceTriggerName = "PlayBounce";
 
     [Header("Bounce Sound")]
-    [SerializeField] private AudioClip bounceSound;      // assign in inspector
-    [SerializeField] private AudioSource audioSource;    // assign in inspector
+    [SerializeField] private AudioClip bounceSound;
+    [SerializeField] private AudioSource audioSource;
 
     [Header("Timing")]
     [SerializeField] private float timeAfterBounce = 3f;
 
     private bool scrollingFinished = false;
     private bool bounceStarted = false;
+    private bool transitioning = false;
 
     void Start()
     {
-        // Hide the bounce object at start
+        // Hide bounce object
         if (bounceObject != null)
             bounceObject.SetActive(false);
 
-        // Set starting position of credits text
+        // Set starting position
         Vector2 pos = creditsText.anchoredPosition;
         pos.y = startY;
         creditsText.anchoredPosition = pos;
@@ -51,14 +53,14 @@ public class Credits : MonoBehaviour
             ScrollCredits();
 
 #if ENABLE_INPUT_SYSTEM
-        if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+        if (!transitioning && Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
         {
-            SceneManager.LoadScene(mainMenuSceneName);
+            GoToMenu();
         }
 #else
-        if (Input.anyKeyDown)
+        if (!transitioning && Input.anyKeyDown)
         {
-            SceneManager.LoadScene(mainMenuSceneName);
+            GoToMenu();
         }
 #endif
     }
@@ -80,25 +82,30 @@ public class Credits : MonoBehaviour
 
         bounceStarted = true;
 
-        // Show the bounce object
         if (bounceObject != null)
             bounceObject.SetActive(true);
 
-        // Play bounce animation (optional)
         if (bounceAnimator != null)
             bounceAnimator.SetTrigger(bounceTriggerName);
 
-        // --- Play bounce sound immediately when credits finish ---
         if (audioSource != null && bounceSound != null)
             audioSource.PlayOneShot(bounceSound);
 
-        // Start timer to go to main menu
         StartCoroutine(GoToMenuAfterDelay());
     }
 
     private IEnumerator GoToMenuAfterDelay()
     {
         yield return new WaitForSeconds(timeAfterBounce);
-        SceneManager.LoadScene(mainMenuSceneName);
+        GoToMenu();
+    }
+
+    private void GoToMenu()
+    {
+        if (transitioning) return;
+        transitioning = true;
+
+        if (fadeTransition != null)
+            fadeTransition.FadeToScene(mainMenuSceneName);
     }
 }

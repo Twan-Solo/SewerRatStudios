@@ -94,4 +94,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c71607589e7f8e42a153591525443a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RespawnTrigger
-  damageAmount: 25
+  damageAmount: 1
