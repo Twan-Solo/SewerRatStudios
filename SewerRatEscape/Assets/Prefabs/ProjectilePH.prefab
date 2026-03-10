@@ -126,9 +126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfdf36050f00fa747be39564123723e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
-  speed: 12
+  speed: 25
   lifetime: 5
-  stickDuration: 3
+  stickDuration: 0
   attackTag: PlayerAttack
 --- !u!54 &6645443322257694935
 Rigidbody:
@@ -152,7 +152,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
