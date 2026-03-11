@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections;
+#if UNITY_EDITOR
+using UnityEngine.InputSystem; // New Input System
+#endif
 
 public class AnimateAndDestroy : MonoBehaviour
 {
@@ -22,15 +25,19 @@ public class AnimateAndDestroy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (hasTriggered) return;                 // Only trigger once
+        if (hasTriggered) return;
         if (!other.CompareTag(playerTag)) return;
 
+        TriggerEvent();
+    }
+
+    private void TriggerEvent()
+    {
         hasTriggered = true;
 
         // Play animation if assigned
         if (animator != null && !string.IsNullOrEmpty(triggerName))
         {
-            // Check if trigger exists in Animator
             bool triggerExists = false;
             foreach (AnimatorControllerParameter param in animator.parameters)
             {
@@ -58,6 +65,10 @@ public class AnimateAndDestroy : MonoBehaviour
         {
             StartCoroutine(DestroyAfterDelay());
         }
+
+#if UNITY_EDITOR
+        Debug.Log($"{gameObject.name} triggered!");
+#endif
     }
 
     private IEnumerator DestroyAfterDelay()
@@ -69,4 +80,17 @@ public class AnimateAndDestroy : MonoBehaviour
             Destroy(objectToDestroy);
         }
     }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    private void Update()
+    {
+        if (hasTriggered) return;
+
+        // F12 debug trigger
+        if (Keyboard.current != null && Keyboard.current.f12Key.wasPressedThisFrame)
+        {
+            TriggerEvent();
+        }
+    }
+#endif
 }

@@ -130,8 +130,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2074353665810930977, guid: 508ebfe322c7ce744998c511edc63d98, type: 3}
   firePoint: {fileID: 8681072128312649697}
   shootCooldown: 0.5
-  maxAmmo: 10
-  currentAmmo: 10
+  maxAmmo: 17
+  currentAmmo: 17
   shootSound: {fileID: 8300000, guid: 22da468c030650e459e6247be63d101f, type: 3}
 --- !u!1 &6358968468731657876
 GameObject:
