@@ -38,17 +38,6 @@ public class PlayerData : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        // Escape key returns to Main Menu
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            SceneManager.LoadScene(mainMenuSceneName);
-            if (destroyPlayerOnDeath)
-                Destroy(gameObject, 0.1f);
-        }
-    }
-
     // ------------------------------
     // Health Management
     // ------------------------------

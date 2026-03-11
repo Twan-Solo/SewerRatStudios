@@ -15,6 +15,10 @@ public class MainMenuController : MonoBehaviour
 
     private void Awake()
     {
+        // Unlock cursor for the menu
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         if (playButton != null)
             playButton.onClick.AddListener(OnPlayClicked);
 

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   score: 0
   heldObjectPrefab: {fileID: 0}
-  maxHealth: 50
+  maxHealth: 10
   damageCooldown: 1.5
   mainMenuSceneName: MainMenu
   destroyPlayerOnDeath: 1
