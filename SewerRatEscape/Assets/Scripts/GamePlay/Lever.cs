@@ -31,13 +31,13 @@ public class Lever : MonoBehaviour, IInteractable
         // Fire all assigned actions in the UnityEvent
         onPull.Invoke();
 
-        // Destroy any assigned objects
+        // Set object inactive
         if (objectsToDestroy != null)
         {
             foreach (GameObject obj in objectsToDestroy)
             {
                 if (obj != null)
-                    Destroy(obj);
+                    obj.SetActive(false);
             }
         }
 
