@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -31,12 +32,20 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponentInParent<PlayerData>() != null) return; 
         if (hasHit) return;
 
-        Debug.Log("projectile hit: " + other.gameObject.name);
+        // Ignore the player
+        if (other.GetComponentInParent<PlayerData>() != null) return;
 
-        // Stun enemy AI if it has one
+        // Ignore score statues completely
+        if (other.GetComponent<StatueScoreTrigger>() != null)
+            return;
+
+        Debug.Log("Projectile hit: " + other.gameObject.name);
+
+        // ------------------------
+        // Enemy Interaction
+        // ------------------------
         EnemyAI enemy = other.GetComponentInParent<EnemyAI>();
         if (enemy != null)
         {
@@ -45,15 +54,19 @@ public class Projectile : MonoBehaviour
             return;
         }
 
-        // Assign the attack tag so ModularDamageDealer detects it
-        gameObject.tag = attackTag;
-
-        // Call ModularDamageDealer if present
-        var dealer = other.GetComponent<ModularDamageDealer>();
+        // Damageable objects
+        ModularDamageDealer dealer = other.GetComponent<ModularDamageDealer>();
         if (dealer != null)
-            dealer.SendMessage("HandleInteraction", gameObject, SendMessageOptions.DontRequireReceiver);
+        {
+            gameObject.tag = attackTag;
+            dealer.HandleInteraction(gameObject);
+            Destroy(gameObject);
+            return;
+        }
 
-        // Stick to surface then despawn
+        // ------------------------
+        // Everything else (walls etc.)
+        // ------------------------
         hasHit = true;
         Destroy(gameObject, stickDuration);
     }

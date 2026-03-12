@@ -50,15 +50,19 @@ public class Credits : MonoBehaviour
     void Update()
     {
         if (!scrollingFinished)
+        {
             ScrollCredits();
+        }
 
+        // Allow skipping ONLY after credits finished
 #if ENABLE_INPUT_SYSTEM
-        if (!transitioning && Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+        if (scrollingFinished && !transitioning &&
+            Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
         {
             GoToMenu();
         }
 #else
-        if (!transitioning && Input.anyKeyDown)
+        if (scrollingFinished && !transitioning && Input.anyKeyDown)
         {
             GoToMenu();
         }

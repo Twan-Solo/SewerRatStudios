@@ -9,63 +9,64 @@ public class ModularDamageDealer : MonoBehaviour
 
     [Header("Stun Settings")]
     public bool isDestructible = true;
-    public int hitsToStun = 3;               // Hits required to stun
+    public int hitsToStun = 3;
+    public float stunDuration = 3f;
+
+    [Header("Destroy Settings")]
+    public int hitsToDestroy = 6;
+
     public string vulnerableToTag = "PlayerAttack";
     public bool destroyAttackerOnHit = true;
-    public float stunDuration = 3f;          // Seconds enemy is stunned
 
     [Header("Score Settings")]
-    public int scoreValue = 10;              // Points awarded per stun
+    public int scoreValue = 10;
 
     private int currentHits = 0;
-    private bool isStunned = false;          // Prevent double scoring
+    private bool isStunned = false;
     private Coroutine stunRoutine;
 
     private Rigidbody rb3D;
     private Rigidbody2D rb2D;
-    private MonoBehaviour[] enemyScripts;    // Enemy AI/movement scripts
+    private MonoBehaviour[] enemyScripts;
 
     void Awake()
     {
         rb3D = GetComponent<Rigidbody>();
         rb2D = GetComponent<Rigidbody2D>();
 
-        // Cache all enemy scripts you want to disable while stunned
         enemyScripts = GetComponents<MonoBehaviour>();
     }
 
-    // ------------------------------
-    // Trigger Handling
-    // ------------------------------
-
     private void OnTriggerEnter(Collider other) => HandleInteraction(other.gameObject);
-
     private void OnTriggerEnter2D(Collider2D other) => HandleInteraction(other.gameObject);
 
-    // ------------------------------
-    // Interaction Logic
-    // ------------------------------
-
-    private void HandleInteraction(GameObject otherObj)
+    // ? Make this public so projectiles can call it
+    public void HandleInteraction(GameObject otherObj)
     {
         if (otherObj == null) return;
 
-        // 1. Hurt Player
+        // Damage player
         if (dealsDamageToPlayer && otherObj.CompareTag("Player"))
         {
             PlayerData.Instance?.TakeDamage(damageToPlayer);
         }
 
-        // 2. Check destructible / stun
+        // Enemy hit by attack
         if (isDestructible && otherObj.CompareTag(vulnerableToTag))
         {
-            if (!isStunned)
+            currentHits++;
+
+            // Destroy enemy if max hits reached
+            if (currentHits >= hitsToDestroy)
             {
-                currentHits++;
-                if (currentHits >= hitsToStun)
-                {
-                    StunEnemy();
-                }
+                DestroyEnemy();
+                return;
+            }
+
+            // Stun enemy if stun threshold reached
+            if (!isStunned && currentHits >= hitsToStun)
+            {
+                StunEnemy();
             }
 
             if (destroyAttackerOnHit)
@@ -74,7 +75,7 @@ public class ModularDamageDealer : MonoBehaviour
     }
 
     // ------------------------------
-    // Stun Logic
+    // STUN
     // ------------------------------
 
     private void StunEnemy()
@@ -83,12 +84,8 @@ public class ModularDamageDealer : MonoBehaviour
 
         isStunned = true;
 
-        Debug.Log($"<color=yellow>[Stunned]</color> {gameObject.name} is stunned!");
+        Debug.Log($"<color=yellow>[Stunned]</color> {gameObject.name}");
 
-        // Award points once
-        ScoreCounter.Instance?.AddScore(scoreValue);
-
-        // Stop movement & AI
         if (rb3D != null) rb3D.isKinematic = true;
         if (rb2D != null) rb2D.simulated = false;
 
@@ -97,14 +94,12 @@ public class ModularDamageDealer : MonoBehaviour
             if (script != this) script.enabled = false;
         }
 
-        // Start stun recovery timer
         stunRoutine = StartCoroutine(StunTimer());
     }
 
     private IEnumerator StunTimer()
     {
         yield return new WaitForSeconds(stunDuration);
-
         RecoverFromStun();
     }
 
@@ -113,11 +108,9 @@ public class ModularDamageDealer : MonoBehaviour
         if (!isStunned) return;
 
         isStunned = false;
-        currentHits = 0;
 
-        Debug.Log($"<color=green>[Recovered]</color> {gameObject.name} is no longer stunned.");
+        Debug.Log($"<color=green>[Recovered]</color> {gameObject.name}");
 
-        // Restore movement & AI
         if (rb3D != null) rb3D.isKinematic = false;
         if (rb2D != null) rb2D.simulated = true;
 
@@ -131,5 +124,19 @@ public class ModularDamageDealer : MonoBehaviour
             StopCoroutine(stunRoutine);
             stunRoutine = null;
         }
+    }
+
+    // ------------------------------
+    // DESTROY
+    // ------------------------------
+
+    private void DestroyEnemy()
+    {
+        Debug.Log($"<color=red>[Destroyed]</color> {gameObject.name}");
+
+        // Score ONLY happens here now
+        ScoreCounter.Instance?.AddScore(scoreValue);
+
+        Destroy(gameObject);
     }
 }
